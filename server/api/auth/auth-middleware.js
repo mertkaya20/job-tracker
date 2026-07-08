@@ -11,6 +11,12 @@ const validateRegister = (req, res, next) => {
     return res.status(400).json({ message: "All fields are required" });
   }
 
+  if (req.body.username.length < 3) {
+    return res
+      .status(400)
+      .json({ message: "Username must be at least 3 characters" });
+  }
+
   req.body.email = req.body.email.toLowerCase().trim();
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
