@@ -13,6 +13,12 @@ const validateRegister = (req, res, next) => {
 
   req.body.email = req.body.email.toLowerCase().trim();
 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailRegex.test(req.body.email)) {
+    return res.status(400).json({ message: "Invalid email format" });
+  }
+
   const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
 
   if (!passwordRegex.test(req.body.password)) {
