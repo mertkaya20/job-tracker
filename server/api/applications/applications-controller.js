@@ -4,7 +4,7 @@ const getApplications = async (req, res, next) => {
   try {
     const applications = await Applications.getAll(req.decodedToken.id);
     if (applications.length === 0) {
-      return res.status(200).json({ message: "There is no application." });
+      return res.status(200).json([]);
     }
     res.status(200).json(applications);
   } catch (error) {
