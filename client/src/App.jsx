@@ -4,6 +4,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Applications from "./pages/Applications";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Layout from "./components/Layout";
 
 const App = () => {
   return (
@@ -15,7 +16,9 @@ const App = () => {
         path="/dashboard"
         element={
           <ProtectedRoute>
-            <Dashboard />
+            <Layout>
+              <Dashboard />
+            </Layout>
           </ProtectedRoute>
         }
       />
@@ -23,7 +26,9 @@ const App = () => {
         path="/applications"
         element={
           <ProtectedRoute>
-            <Applications />
+            <Layout>
+              <Applications />
+            </Layout>
           </ProtectedRoute>
         }
       />
