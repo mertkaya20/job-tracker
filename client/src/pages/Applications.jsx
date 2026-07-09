@@ -8,13 +8,17 @@ import SkeletonCard from "../components/SkeletonCard";
 import { formatDate } from "../utils/formatDate";
 import ApplicationModal from "../components/ApplicationModal";
 import { statusColors } from "../utils/statusColors";
+import ConfirmModal from "../components/ConfirmModal";
 
 const Applications = () => {
   const statuses = ["all", "applied", "interview", "offer", "rejected"];
 
   const queryClient = useQueryClient();
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeFilter, setActiveFilter] = useState("all");
   const [errorMessage, setErrorMessage] = useState(null);
-
   const [selectedApplication, setSelectedApplication] = useState(null);
 
   const { data, isPending, isError } = useQuery({
@@ -27,14 +31,14 @@ const Applications = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["applications"] });
       queryClient.invalidateQueries({ queryKey: ["stats"] });
+      setConfirmOpen(false);
+      setDeleteId(null);
     },
     onError: (error) => {
       setErrorMessage(error.response.data.message);
     },
   });
 
-  const [isOpen, setIsOpen] = useState(false);
-  const [activeFilter, setActiveFilter] = useState("all");
   const applications = data?.data || [];
   const filteredApplications =
     activeFilter === "all"
@@ -117,9 +121,11 @@ const Applications = () => {
                   Edit
                 </button>
                 <button
-                  disabled={isDeleting}
-                  onClick={() => deleteApplication(app.id)}
-                  className="text-xs text-gray-400 hover:text-red-500 transition-colors cursor-pointer"
+                  className="text-xs text-gray-400 hover:text-red-500 transition-colors cursor-pointer disabled:cursor-not-allowed"
+                  onClick={() => {
+                    setDeleteId(app.id);
+                    setConfirmOpen(true);
+                  }}
                 >
                   Delete
                 </button>
@@ -139,6 +145,15 @@ const Applications = () => {
           setSelectedApplication(null);
         }}
         application={selectedApplication}
+      />
+      <ConfirmModal
+        isOpen={confirmOpen}
+        onClose={() => {
+          setConfirmOpen(false);
+          setDeleteId(null);
+        }}
+        onConfirm={() => deleteApplication(deleteId)}
+        isLoading={isDeleting}
       />
     </div>
   );
