@@ -29,9 +29,15 @@ const AddApplicationModal = ({ application, isOpen, onClose }) => {
         notes: application.notes || "",
       });
     } else {
-      reset();
+      reset({
+        company_name: "",
+        position: "",
+        status: "applied",
+        applied_date: "",
+        notes: "",
+      });
     }
-  }, [application]);
+  }, [application, isOpen]);
 
   const [errorMessage, setErrorMessage] = useState(null);
 
