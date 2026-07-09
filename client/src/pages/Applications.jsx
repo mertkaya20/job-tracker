@@ -104,6 +104,9 @@ const Applications = () => {
                 <p className="text-xs text-gray-300 mt-0.5">
                   {app.applied_date ? formatDate(app.applied_date) : "-"}
                 </p>
+                {app.notes && (
+                  <p className="text-xs text-gray-300 mt-0.5">{app.notes}</p>
+                )}
               </div>
               <div className="flex items-center gap-3">
                 <span

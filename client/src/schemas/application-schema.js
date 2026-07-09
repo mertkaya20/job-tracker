@@ -5,5 +5,5 @@ export const applicationSchema = yup.object({
   position: yup.string().required("Position is required"),
   status: yup.string().required("Status is required"),
   applied_date: yup.string().required("Applied date is required"),
-  notes: yup.string().nullable(),
+  notes: yup.string().max(50, "Notes must be at most 50 characters").nullable(),
 });
