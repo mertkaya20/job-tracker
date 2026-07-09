@@ -102,7 +102,7 @@ const Register = () => {
           </div>
 
           <button
-            disabled={!isValid}
+            disabled={!isValid || isPending}
             type="submit"
             className="w-full bg-primary text-white py-2.5 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity mt-2 cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-400"
           >
