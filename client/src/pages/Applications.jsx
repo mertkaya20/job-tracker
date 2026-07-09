@@ -20,6 +20,7 @@ const Applications = () => {
   const [activeFilter, setActiveFilter] = useState("all");
   const [errorMessage, setErrorMessage] = useState(null);
   const [selectedApplication, setSelectedApplication] = useState(null);
+  const [search, setSearch] = useState("");
 
   const { data, isPending, isError } = useQuery({
     queryKey: ["applications"],
@@ -40,27 +41,40 @@ const Applications = () => {
   });
 
   const applications = data?.data || [];
-  const filteredApplications =
-    activeFilter === "all"
-      ? applications
-      : applications.filter((app) => app.status === activeFilter);
+  const filteredApplications = applications
+    .filter((app) => activeFilter === "all" || app.status === activeFilter)
+    .filter(
+      (app) =>
+        app.company_name.toLowerCase().includes(search.toLowerCase()) ||
+        app.position.toLowerCase().includes(search.toLowerCase()),
+    );
 
   return (
     <div>
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900">Applications</h2>
-          <p className="text-gray-500 text-sm mt-1">
-            Manage your job applications
-          </p>
+      <div className="flex flex-col gap-4 mb-8">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900">Applications</h2>
+            <p className="text-gray-500 text-sm mt-1">
+              Manage your job applications
+            </p>
+          </div>
+          <button
+            onClick={() => setIsOpen(true)}
+            className="bg-primary text-white text-sm font-semibold px-5 py-2.5 rounded-lg hover:opacity-90 transition-opacity cursor-pointer"
+          >
+            + Add Application
+          </button>
         </div>
-        <button
-          onClick={() => setIsOpen(true)}
-          className="bg-primary text-white text-sm font-semibold px-5 py-2.5 rounded-lg hover:opacity-90 transition-opacity cursor-pointer"
-        >
-          + Add Application
-        </button>
+
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search by company or position..."
+          className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:border-primary transition-colors"
+        />
       </div>
 
       {/* Filters */}
