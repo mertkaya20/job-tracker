@@ -7,6 +7,7 @@ import { useState } from "react";
 import SkeletonCard from "../components/SkeletonCard";
 import { formatDate } from "../utils/formatDate";
 import ApplicationModal from "../components/ApplicationModal";
+import { statusColors } from "../utils/statusColors";
 
 const Applications = () => {
   const statuses = ["all", "applied", "interview", "offer", "rejected"];
@@ -101,7 +102,9 @@ const Applications = () => {
                 </p>
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-xs bg-blue-50 text-blue-600 px-3 py-1 rounded-full font-medium capitalize">
+                <span
+                  className={`text-xs px-3 py-1 rounded-full font-medium capitalize ${statusColors[app.status] || "bg-gray-50 text-gray-600"}`}
+                >
                   {app.status}
                 </span>
                 <button

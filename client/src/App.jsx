@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import Applications from "./pages/Applications";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
+import NotFound from "./pages/NotFound";
 
 const App = () => {
   return (
@@ -32,6 +33,7 @@ const App = () => {
           </ProtectedRoute>
         }
       />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };

@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getApplicationsRequest, getStatsRequest } from "../api/applications";
 import SkeletonCard from "../components/SkeletonCard";
+import { statusColors } from "../utils/statusColors";
 
 const Dashboard = () => {
   const statCards = [
@@ -133,7 +134,9 @@ const Dashboard = () => {
                   </p>
                   <p className="text-xs text-gray-400 mt-0.5">{app.position}</p>
                 </div>
-                <span className="text-xs bg-blue-50 text-blue-600 px-3 py-1 rounded-full font-medium capitalize">
+                <span
+                  className={`text-xs bg-blue-50 text-blue-600 px-3 py-1 rounded-full font-medium capitalize ${statusColors[app.status] || "bg-gray-50 text-gray-600"}`}
+                >
                   {app.status}
                 </span>
               </div>
