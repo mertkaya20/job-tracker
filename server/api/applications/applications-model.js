@@ -9,8 +9,8 @@ const getById = (id) => {
 };
 
 const addApplications = async (application) => {
-  const [id] = await db("applications").insert(application);
-  return getById(id);
+  const [row] = await db("applications").insert(application).returning("id");
+  return getById(row.id);
 };
 
 const updateApplication = async (id, changes) => {
