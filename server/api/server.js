@@ -5,7 +5,14 @@ const authRouter = require("./auth/auth-router");
 const applicationsRouter = require("./applications/applications-router");
 
 server.use(express.json());
-server.use(cors({ origin: "http://localhost:5173" }));
+server.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://job-tracker-nine-azure.vercel.app",
+    ],
+  }),
+);
 server.use("/api/auth", authRouter);
 server.use("/api/applications", applicationsRouter);
 
