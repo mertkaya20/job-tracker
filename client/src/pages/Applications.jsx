@@ -53,7 +53,7 @@ const Applications = () => {
     <div>
       {/* Header */}
       <div className="flex flex-col gap-4 mb-8">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-8">
           <div>
             <h2 className="text-2xl font-bold text-gray-900">Applications</h2>
             <p className="text-gray-500 text-sm mt-1">
@@ -62,7 +62,7 @@ const Applications = () => {
           </div>
           <button
             onClick={() => setIsOpen(true)}
-            className="bg-primary text-white text-sm font-semibold px-5 py-2.5 rounded-lg hover:opacity-90 transition-opacity cursor-pointer"
+            className="bg-primary text-white text-sm font-semibold px-5 py-2.5 rounded-lg hover:opacity-90 transition-opacity cursor-pointer w-full sm:w-auto"
           >
             + Add Application
           </button>
@@ -83,7 +83,11 @@ const Applications = () => {
           <button
             onClick={() => setActiveFilter(status)}
             key={status}
-            className="text-xs font-medium px-4 py-2 rounded-full border border-gray-200 text-gray-500 hover:border-primary hover:text-primary transition-colors capitalize cursor-pointer"
+            className={`text-xs font-medium px-4 py-2 rounded-full border transition-colors capitalize cursor-pointer ${
+              activeFilter === status
+                ? "bg-primary text-white border-primary"
+                : "border-gray-200 text-gray-500 hover:border-primary hover:text-primary"
+            }`}
           >
             {status}
           </button>

@@ -25,7 +25,9 @@ const AddApplicationModal = ({ application, isOpen, onClose }) => {
         company_name: application.company_name,
         position: application.position,
         status: application.status,
-        applied_date: application.applied_date || "",
+        applied_date: application.applied_date
+          ? application.applied_date.split("T")[0]
+          : "",
         notes: application.notes || "",
       });
     } else {

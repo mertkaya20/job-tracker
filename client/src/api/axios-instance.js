@@ -17,11 +17,15 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    const isAuthEndpoint = error.config.url.includes("/auth/");
+    const isUnauthorized = error.response?.status === 401;
+
+    if (isUnauthorized && !isAuthEndpoint) {
       localStorage.removeItem("token");
       store.dispatch(logout());
       window.location.href = "/login";
     }
+
     return Promise.reject(error);
   },
 );

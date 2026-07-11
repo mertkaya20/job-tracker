@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { registerSchema } from "../schemas/auth-schema";
 import { useMutation } from "@tanstack/react-query";
@@ -6,16 +6,41 @@ import { registerRequest } from "../api/auth";
 import { useDispatch } from "react-redux";
 import { login } from "../store/auth-slice";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useState } from "react";
 
 const Register = () => {
+  const [errorMessage, setErrorMessage] = useState(null);
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isValid },
   } = useForm({
     resolver: yupResolver(registerSchema),
     mode: "onTouched",
   });
+
+  const password = useWatch({ control, name: "password" });
+
+  const getStrength = (pwd) => {
+    if (!pwd) return 0;
+    let score = 0;
+    if (pwd.length >= 8) score++;
+    if (/[A-Z]/.test(pwd)) score++;
+    if (/\d/.test(pwd)) score++;
+    if (/[^A-Za-z0-9]/.test(pwd)) score++;
+    return score;
+  };
+
+  const strength = getStrength(password);
+
+  const strengthConfig = {
+    0: { label: "Too weak", color: "bg-gray-200", width: "w-0" },
+    1: { label: "Weak", color: "bg-red-400", width: "w-1/4" },
+    2: { label: "Fair", color: "bg-yellow-400", width: "w-2/4" },
+    3: { label: "Good", color: "bg-lime-400", width: "w-3/4" },
+    4: { label: "Strong", color: "bg-green-500", width: "w-full" },
+  };
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -28,7 +53,7 @@ const Register = () => {
       navigate("/dashboard");
     },
     onError: (error) => {
-      console.log(error);
+      setErrorMessage(error.response.data.message);
     },
   });
 
@@ -57,7 +82,7 @@ const Register = () => {
             <input
               {...register("username")}
               type="text"
-              placeholder="johndoe"
+              placeholder="jack"
               className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:border-primary transition-colors"
             />
             {errors.username && (
@@ -74,7 +99,7 @@ const Register = () => {
             <input
               {...register("email")}
               type="email"
-              placeholder="you@example.com"
+              placeholder="sparrow@example.com"
               className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:border-primary transition-colors"
             />
             {errors.email && (
@@ -94,6 +119,20 @@ const Register = () => {
               placeholder="••••••••"
               className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:border-primary transition-colors"
             />
+            {password && (
+              <div className="mt-2">
+                <div className="h-1 w-full bg-gray-100 rounded-full overflow-hidden">
+                  <div
+                    className={`h-1 rounded-full transition-all duration-300 ${strengthConfig[strength].color} ${strengthConfig[strength].width}`}
+                  />
+                </div>
+                <p
+                  className={`text-xs mt-1 ${strengthConfig[strength].color.replace("bg-", "text-")}`}
+                >
+                  {strengthConfig[strength].label}
+                </p>
+              </div>
+            )}
             {errors.password && (
               <p className="text-red-500 text-xs mt-1">
                 {errors.password.message}
@@ -101,6 +140,25 @@ const Register = () => {
             )}
           </div>
 
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Confirm Password
+            </label>
+            <input
+              {...register("confirmPassword")}
+              type="password"
+              placeholder="••••••••"
+              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:border-primary transition-colors"
+            />
+            {errors.confirmPassword && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.confirmPassword.message}
+              </p>
+            )}
+          </div>
+          {errorMessage && (
+            <p className="text-red-500 text-sm text-center">{errorMessage}</p>
+          )}
           <button
             disabled={!isValid || isPending}
             type="submit"

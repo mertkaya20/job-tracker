@@ -60,7 +60,7 @@ const Login = () => {
             <input
               {...register("email")}
               type="email"
-              placeholder="you@example.com"
+              placeholder="jack@example.com"
               className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:border-primary transition-colors"
             />
             {errors.email && (
