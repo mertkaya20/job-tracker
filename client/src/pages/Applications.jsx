@@ -21,6 +21,7 @@ const Applications = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [selectedApplication, setSelectedApplication] = useState(null);
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
 
   const { data, isPending, isError } = useQuery({
     queryKey: ["applications"],
@@ -49,6 +50,24 @@ const Applications = () => {
         app.position.toLowerCase().includes(search.toLowerCase()),
     );
 
+  const itemsPerPage = 5;
+
+  const paginatedApplications = filteredApplications.slice(
+    (page - 1) * itemsPerPage,
+    page * itemsPerPage,
+  );
+  const totalPages = Math.ceil(filteredApplications.length / itemsPerPage);
+
+  const handleFilterChange = (status) => {
+    setActiveFilter(status);
+    setPage(1);
+  };
+
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+    setPage(1);
+  };
+
   return (
     <div>
       {/* Header */}
@@ -71,7 +90,7 @@ const Applications = () => {
         <input
           type="text"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={handleSearch}
           placeholder="Search by company or position..."
           className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:border-primary transition-colors"
         />
@@ -81,7 +100,7 @@ const Applications = () => {
       <div className="flex gap-2 flex-wrap mb-6">
         {statuses.map((status) => (
           <button
-            onClick={() => setActiveFilter(status)}
+            onClick={() => handleFilterChange(status)}
             key={status}
             className={`text-xs font-medium px-4 py-2 rounded-full border transition-colors capitalize cursor-pointer ${
               activeFilter === status
@@ -109,7 +128,7 @@ const Applications = () => {
         </div>
       ) : (
         <div className="bg-white rounded-2xl border border-gray-100 divide-y divide-gray-50">
-          {filteredApplications.map((app) => (
+          {paginatedApplications.map((app) => (
             <div
               key={app.id}
               className="flex items-center justify-between px-6 py-4"
@@ -153,6 +172,40 @@ const Applications = () => {
               </div>
             </div>
           ))}
+
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-2 mt-6">
+              <button
+                onClick={() => setPage((p) => p - 1)}
+                disabled={page === 1}
+                className="text-xs px-3 py-1.5 rounded-lg border border-gray-200 text-gray-500 hover:border-primary hover:text-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+              >
+                Previous
+              </button>
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                <button
+                  key={p}
+                  onClick={() => setPage(p)}
+                  className={`text-xs px-3 py-1.5 rounded-lg border transition-colors cursor-pointer ${
+                    page === p
+                      ? "bg-primary text-white border-primary"
+                      : "border-gray-200 text-gray-500 hover:border-primary hover:text-primary"
+                  }`}
+                >
+                  {p}
+                </button>
+              ))}
+
+              <button
+                onClick={() => setPage((p) => p + 1)}
+                disabled={page === totalPages}
+                className="text-xs px-3 py-1.5 rounded-lg border border-gray-200 text-gray-500 hover:border-primary hover:text-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       )}
       {errorMessage && (
