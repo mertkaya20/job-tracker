@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/auth-slice";
 import ChangePasswordModal from "./ChangePasswordModal";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -50,7 +51,11 @@ const Navbar = () => {
               className="text-sm text-gray-600 font-medium hover:text-primary transition-colors cursor-pointer flex items-center gap-1"
             >
               {user?.username}
-              <span className="text-xs">{dropdownOpen ? "▲" : "▼"}</span>
+              {dropdownOpen ? (
+                <ChevronUp size={14} />
+              ) : (
+                <ChevronDown size={14} />
+              )}
             </button>
 
             {dropdownOpen && (
