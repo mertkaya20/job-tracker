@@ -2,12 +2,15 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/auth-slice";
+import ChangePasswordModal from "./ChangePasswordModal";
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [changePasswordOpen, setChangePasswordOpen] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -39,17 +42,37 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* Desktop User + Logout */}
+        {/* Desktop User Dropdown */}
         <div className="hidden md:flex items-center gap-4">
-          <span className="text-sm text-gray-600 font-medium">
-            {user?.username}
-          </span>
-          <button
-            onClick={handleLogout}
-            className="text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors cursor-pointer"
-          >
-            Logout
-          </button>
+          <div className="relative">
+            <button
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              className="text-sm text-gray-600 font-medium hover:text-primary transition-colors cursor-pointer flex items-center gap-1"
+            >
+              {user?.username}
+              <span className="text-xs">{dropdownOpen ? "▲" : "▼"}</span>
+            </button>
+
+            {dropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
+                <button
+                  onClick={() => {
+                    setChangePasswordOpen(true);
+                    setDropdownOpen(false);
+                  }}
+                  className="w-full text-left px-4 py-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 transition-colors cursor-pointer"
+                >
+                  Change Password
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="w-full text-left px-4 py-2 text-sm text-gray-600 hover:text-red-500 hover:bg-gray-50 transition-colors cursor-pointer"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Mobile Hamburger */}
@@ -86,19 +109,33 @@ const Navbar = () => {
           >
             Applications
           </Link>
-          <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+          <div className="flex flex-col gap-2 pt-2 border-t border-gray-100">
             <span className="text-sm text-gray-600 font-medium">
               {user?.username}
             </span>
             <button
+              onClick={() => {
+                setChangePasswordOpen(true);
+                setMenuOpen(false);
+              }}
+              className="text-left text-sm text-gray-500 hover:text-primary transition-colors cursor-pointer"
+            >
+              Change Password
+            </button>
+            <button
               onClick={handleLogout}
-              className="text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors cursor-pointer"
+              className="text-left text-sm text-gray-500 hover:text-red-500 transition-colors cursor-pointer"
             >
               Logout
             </button>
           </div>
         </div>
       )}
+
+      <ChangePasswordModal
+        isOpen={changePasswordOpen}
+        onClose={() => setChangePasswordOpen(false)}
+      />
     </nav>
   );
 };

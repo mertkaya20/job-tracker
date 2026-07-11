@@ -17,7 +17,9 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    const isAuthEndpoint = error.config.url.includes("/auth/");
+    const isAuthEndpoint =
+      error.config.url.includes("/auth/") ||
+      error.config.url.includes("/change-password");
     const isUnauthorized = error.response?.status === 401;
 
     if (isUnauthorized && !isAuthEndpoint) {
