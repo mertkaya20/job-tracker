@@ -23,8 +23,18 @@ const Navbar = () => {
     <nav className="bg-white border-b border-gray-100 px-4 py-4">
       <div className="max-w-6xl mx-auto flex items-center justify-between">
         {/* Logo */}
-        <Link to="/dashboard" className="text-lg font-bold text-gray-900">
-          Job<span className="text-primary">Tracker</span>
+        <Link
+          to="/dashboard"
+          className="flex items-center gap-2 text-lg font-bold text-gray-900"
+        >
+          <img
+            src="/android-chrome-192x192.png"
+            alt="JobTracker"
+            className="w-8 h-8 rounded-lg"
+          />
+          <span>
+            Job<span className="text-primary">Tracker</span>
+          </span>
         </Link>
 
         {/* Desktop Links */}
