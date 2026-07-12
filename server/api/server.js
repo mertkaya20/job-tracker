@@ -8,10 +8,7 @@ const usersRouter = require("./users/users-router");
 server.use(express.json());
 server.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://job-tracker-nine-azure.vercel.app",
-    ],
+    origin: ["http://localhost:5173", "https://job-tracker-mert.vercel.app"],
   }),
 );
 server.use("/api/auth", authRouter);
