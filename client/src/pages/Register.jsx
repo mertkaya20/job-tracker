@@ -64,13 +64,15 @@ const Register = () => {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 w-full max-w-md p-8">
         {/* Logo */}
-        <div className="mb-8">
+        <div className="flex items-center gap-2 mb-8">
+          <img
+            src="/android-chrome-192x192.png"
+            alt="JobTracker"
+            className="w-8 h-8 rounded-lg"
+          />
           <h1 className="text-2xl font-bold text-gray-900">
             Job<span className="text-primary">Tracker</span>
           </h1>
-          <p className="text-gray-500 text-sm mt-1">
-            Create your account to get started
-          </p>
         </div>
 
         {/* Form */}
